@@ -19,7 +19,7 @@
     "webpack-userscript": "^2.3.1"
   },
   "dependencies": {
-    "imdb-scrapper": "^2.3.0",
+    "imdb-scrapper": "github:lukszi/imdb-scrapper",
     "jquery": "^3.4.1"
   }
 }
