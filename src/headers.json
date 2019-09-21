@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "author": "Lukas Sz",
+  "description": "A Userscript that shows IMDB Ratings in Netflix",
+  "name": "Netflix IMDB ratings",
+  "match": "https://www.netflix.com/*",
+  "grant": [
+    "unsafeWindow",
+    "GM_getResourceText",
+    "GM_xmlhttpRequest",
+    "GM_getValue",
+    "GM_setValue"
+  ],
+  "require": [
+    "https://code.jquery.com/jquery-3.4.1.min.js"
+  ],
+  "namespace": "http://tampermonkey.net/"
+}

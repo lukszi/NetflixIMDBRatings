@@ -1,31 +1,57 @@
-import nameToImdb from '../node_modules/name-to-imdb/index.js';
+// import simpleSearch from '../node_modules/imdb-scrapper/index.js';
+const { simpleSearch, scrapper } = require("../node_modules/imdb-scrapper/index.js");
+
 export class IMDBHelper{
-    constructor(cache ={}){
-        this.cache = cache;
+    constructor(){
+        this.cacheLoaded = false;
+        this.cache = {};
+        (async () => {
+            this.cache = await GM_getValue("movieCache", {});
+            this.cacheLoaded = true;
+        })();
     }
 
     getIMDBId(title, callback){
         // Check if cache has the title
         if(this.cache[title]){
-            callback(null ,this.cache[title].res, this.cache[title].inf);
+            callback(this.cache[title]);
             return;
         }
 
         // Cache doesn't have the title, request it from API
-        nameToImdb({name:title}, (err, res, inf) => {
-            // Abort on error
-            if(err){
-                callback(err, null, null);
-                return;
+        simpleSearch(title).then(foundTitles => {
+            if(foundTitles.d.length>0){
+                this.cache[title] = foundTitles.d[0];
+                if(this.cacheLoaded){
+                    GM_setValue("movieCache", this.cache)
+                }
+                callback(this.cache[title])
             }
+            else{
+                callback(null, "Nothing found")
+            }
+        }).catch(reason => callback(null, reason));
+    }
 
-            // Save to cache
-            this.cache[title]  = {res: res, inf: inf};
+    getRating(imdbId, callback){
+        // Get cached object
+        let movie = Object.filter(this.cache,cacheEntry => {return cacheEntry.id === imdbId});
+        movie = movie[Object.keys(movie)[0]];
+        // Check if it has the info already
+        if(movie.scrapperInfo){
+            callback(movie.scrapperInfo);
+            return;
+        }
 
-            // Callback
-            callback(null ,this.cache[title].res, this.cache[title].inf);
-            console.log(res); // prints "tt0121955"
-            console.log(inf); // inf contains info on where we matched that name - e.g. metadata, or on imdb
-        });
+        // Movie doesn't have info yet, scrape and persist
+        scrapper(imdbId).then(value => {
+            movie.scrapperInfo = value;
+            GM_setValue("movieCache", this.cache);
+            callback(movie.scrapperInfo);
+        }).catch(reason => callback(null, reason))
     }
 }
+Object.filter = (obj, predicate) =>
+    Object.keys(obj)
+        .filter( key => predicate(obj[key]) )
+        .reduce( (res, key) => (res[key] = obj[key], res), {} );

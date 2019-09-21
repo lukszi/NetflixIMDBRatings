@@ -6,38 +6,20 @@
   "repository": "https://github.com/lukszi/NetflixIMDBRatings",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-dev": "npx userscript-builder --mode dev",
-    "build-bugfix": "npx userscript-builder --mode bugfix",
-    "build-minor": "npx userscript-builder --mode minor",
-    "build-major": "npx userscript-builder --mode major"
+    "build": "webpack",
+    "dev-server": "webpack-dev-server"
   },
   "author": "Lukas Sz",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "userscript-builder": "^0.1.1",
-  },
-  "userscript": {
-    "entry": "./src/index.js",
-    "dev": "./dist",
-    "release": "./release",
-    "fileName": "NetflixImdb",
-    "meta": {
-      "name": "Netflix IMDB ratings",
-      "namespace": "http://tampermonkey.net/",
-      "match": "https://www.netflix.com/*",
-      "grant": [
-        "unsafeWindow",
-        "GM_getResourceText"
-      ],
-      "require": [
-        "https://code.jquery.com/jquery-3.4.1.min.js",
-        "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js"
-      ]
-    }
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1",
+    "webpack-userscript": "^2.3.1"
   },
   "dependencies": {
     "imdb-scrapper": "^2.3.0",
-    "jquery": "^3.4.1",
-    "name-to-imdb": "^2.3.2"
+    "jquery": "^3.4.1"
   }
 }
