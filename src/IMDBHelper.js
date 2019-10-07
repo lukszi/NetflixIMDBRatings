@@ -13,19 +13,19 @@ export class IMDBHelper{
 
     getIMDBId(title, callback){
         // Check if cache has the title
-        if(this.cache[title]){
-            callback(this.cache[title]);
+        if(this.cache[title.title]){
+            callback(this.cache[title.title]);
             return;
         }
 
         // Cache doesn't have the title, request it from API
-        simpleSearch(title).then(foundTitles => {
+        simpleSearch(title.title).then(foundTitles => {
             if(foundTitles.d.length>0){
-                this.cache[title] = foundTitles.d[0];
+                this.cache[title.title] = foundTitles.d[0];
                 if(this.cacheLoaded){
                     GM_setValue("movieCache", this.cache)
                 }
-                callback(this.cache[title])
+                callback(this.cache[title.title])
             }
             else{
                 callback(null, "Nothing found")
