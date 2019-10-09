@@ -10,13 +10,8 @@ export class IMDBInfo {
 }
 
 export class IMDBHelper{
-    constructor(){
-        this.cacheLoaded = false;
-        this.cache = {};
-        (async () => {
-            this.cache = await GM_getValue("movieCache", {});
-            this.cacheLoaded = true;
-        })();
+    constructor(cache){
+        this.cache = cache;
     }
 
     /**
@@ -26,19 +21,17 @@ export class IMDBHelper{
      */
     getIMDBId(title, callback){
         // Check if cache has the title
-        if(this.cache[title.title]){
-            callback(this.cache[title.title]);
+        let cachedTitle = this.cache.getByTitle(title.title);
+        if(cachedTitle.IMDBInfo){
+            callback(cachedTitle);
             return;
         }
 
         // Cache doesn't have the title, request it from API
         simpleSearch(title.title).then(foundTitles => {
             if(foundTitles.d.length>0){
-                this.cache[title.title] = foundTitles.d[0];
-                if(this.cacheLoaded){
-                    GM_setValue("movieCache", this.cache)
-                }
-                callback(this.cache[title.title].id)
+                title.IMDBInfo = new IMDBInfo(foundTitles.d[0].id);
+                callback(title)
             }
             else{
                 callback(null, "Nothing found")
@@ -48,22 +41,22 @@ export class IMDBHelper{
 
     getRating(imdbId, callback){
         // Get cached movie
-        let movie = Object.filter(this.cache,cachedMovie => {return cachedMovie.id === imdbId});
-        movie = movie[Object.keys(movie)[0]];
+        let movie = this.cache.getByIMDBId(imdbId);
         // Check if it has the info already
-        if(movie.scrapperInfo){
-            callback(movie.scrapperInfo);
+        if(movie){
+            callback(movie);
             return;
         }
 
         // Movie doesn't have info yet, scrape and persist
         scrapper(imdbId).then(value => {
-            movie.scrapperInfo = value;
-            GM_setValue("movieCache", this.cache);
-            callback(movie.scrapperInfo);
+            movie.IMDBInfo.scrapperInfo = value;
+            this.cache.persist();
+            callback(movie);
         }).catch(reason => callback(null, reason))
     }
 }
+
 Object.filter = (obj, predicate) =>
     Object.keys(obj)
         .filter( key => predicate(obj[key]) )
