@@ -4,9 +4,8 @@
 export class TitleCache {
     constructor() {
         this.cacheLoaded = false;
-        this.titles = [];
         this.callbackFNs = {add: [], update: [], cacheLoaded: []};
-        this.cache = {};
+        this.cache = [];
 
         // Load the cache from persistence
         (async () => {
@@ -26,7 +25,14 @@ export class TitleCache {
     persist() {
         this.checkCacheValidity();
         (async () => {
-            this.cache = await GM_setValue("cache", this.titles);
+            function skipJqueryObject(key, value){
+                if(key === "$containers"){
+                    return undefined;
+                }
+                return value;
+            }
+            let cacheWithoutJquery = JSON.parse(JSON.stringify(this.cache, skipJqueryObject));
+            await GM_setValue("cache", cacheWithoutJquery);
         })();
     }
 
@@ -49,9 +55,12 @@ export class TitleCache {
                 // Call all update callbacks
                 this.callbackFNs.update.forEach(callback => callback(title));
             }
+            if (!cachedTitle.IMDBInfo){
+                cachedTitle.IMDBInfo = title.IMDBInfo;
+            }
             return false;
         } else {
-            this.cache.put(title);
+            this.cache.push(title);
 
             // Call all add callbacks
             this.callbackFNs.add.forEach(callback => callback(title));
@@ -61,11 +70,9 @@ export class TitleCache {
 
     addLoadCallback(callback){
         if(this.cacheLoaded){
-            console.log("Calling callback now");
             callback(this);
         }
         else{
-            console.log("Adding callback to queue");
             this.callbackFNs.cacheLoaded.push(callback);
         }
     }
@@ -91,7 +98,12 @@ export class TitleCache {
     getByIMDBId(id) {
         this.checkCacheValidity();
 
-        let filtered = this.cache.filter(tempTitle => tempTitle.IMDBInfo.id === id);
+        let filtered = this.cache.filter(tempTitle => {
+            if(tempTitle.IMDBInfo)
+                return tempTitle.IMDBInfo.id === id;
+            else
+                return false
+        });
         if (filtered.length > 0) {
             return filtered[0];
         }

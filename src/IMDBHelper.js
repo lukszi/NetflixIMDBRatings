@@ -43,11 +43,10 @@ export class IMDBHelper{
         // Get cached movie
         let movie = this.cache.getByIMDBId(imdbId);
         // Check if it has the info already
-        if(movie){
+        if(movie && movie.IMDBInfo && movie.IMDBInfo.scrapperInfo){
             callback(movie);
             return;
         }
-
         // Movie doesn't have info yet, scrape and persist
         scrapper(imdbId).then(value => {
             movie.IMDBInfo.scrapperInfo = value;
