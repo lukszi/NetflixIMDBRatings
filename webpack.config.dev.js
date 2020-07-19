@@ -14,9 +14,8 @@ module.exports = {
     },
     plugins: [
         new WebpackUserscript({
-            headers: {
-                version: dev ? `[version]-build.[buildNo]` : `[version]`
-            }
+            headers: path.join(__dirname, './src/headers.json'),
+            pretty: true
         })
     ]
 };

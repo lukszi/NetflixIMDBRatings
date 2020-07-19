@@ -1,90 +1,67 @@
+const cacheMaxAge = 7;
+
 /**
- * Cache for all {NetflixTitle} entries
+ * Caches already found values
  */
 export class TitleCache {
-    constructor() {
-        this.cacheLoaded = false;
-        this.callbackFNs = {add: [], update: [], cacheLoaded: []};
+    async constructor() {
+        await this.load();
+    }
+
+    /**
+     *
+     * Initializes the TitleCache from the storage
+     */
+    async load(){
+        // Clear cache
         this.cache = [];
-
         // Load the cache from persistence
-        (async () => {
-            this.cache = await GM_getValue("cache", []);
-            this.cacheLoaded = true;
-
-            // Call the callbacks
-            this.callbackFNs.cacheLoaded.forEach(callback => callback(this));
-            // Remove all cacheLoaded callbacks since they only should be called on the inital load
-            this.callbackFNs.cacheLoaded = [];
-        })();
+        this.cache = await GM_getValue("cache", []);
     }
 
     /**
      * Persists the cache
+     *
+     * @return { Promise<boolean> } true if operation was successful false otherwise
      */
-    persist() {
-        this.checkCacheValidity();
-        (async () => {
-            function skipJqueryObject(key, value){
-                if(key === "$containers"){
-                    return undefined;
-                }
-                return value;
-            }
-            let cacheWithoutJquery = JSON.parse(JSON.stringify(this.cache, skipJqueryObject));
-            await GM_setValue("cache", cacheWithoutJquery);
-        })();
+    async persist() {
+        let cacheWithoutJquery = JSON.parse(JSON.stringify(this.cache));
+        await GM_setValue("cache", cacheWithoutJquery);
+        return true;
     }
 
     /**
      * Adds a title to the cache
      *
-     * @param title { NetflixTitle }
+     * @param name { string } Title of the movie
+     * @param IMDBId { string } IMDB id of the movie
+     * @param rating { number } rating of the title
      */
-    add(title) {
-        this.checkCacheValidity();
-
+    add(name, IMDBId, rating) {
         // Check if a title is in cache already
-        let cachedTitle = this.getByTitle(title.title);
+        let cachedTitle = this.getByName(name);
         if (cachedTitle) {
-            // replace title if it is stale
+            // Remove if title is stale
             if (cachedTitle.isStale()) {
-                cachedTitle.clearStaleContainers();
-                cachedTitle.$containers.concat(title.$containers);
-
-                // Call all update callbacks
-                this.callbackFNs.update.forEach(callback => callback(title));
+                this.cache.filter(title => title.name !== cachedTitle.name)
             }
-            if (!cachedTitle.IMDBInfo){
-                cachedTitle.IMDBInfo = title.IMDBInfo;
+            // Not adding title that isn't stale again
+            else {
+                return false;
             }
-            return false;
-        } else {
-            this.cache.push(title);
+        }
 
-            // Call all add callbacks
-            this.callbackFNs.add.forEach(callback => callback(title));
-            return true;
-        }
-    }
-
-    addLoadCallback(callback){
-        if(this.cacheLoaded){
-            callback(this);
-        }
-        else{
-            this.callbackFNs.cacheLoaded.push(callback);
-        }
+        let title = new Title(name, rating, IMDBId)
+        this.cache.push(title);
+        return true;
     }
 
     /**
-     * @param title {string} name of the title to be retrieved
-     * @return {NetflixTitle} returns the found title or null
+     * @param name {string} name of the name to be retrieved
+     * @return {Title} returns the found name or null
      */
-    getByTitle(title) {
-        this.checkCacheValidity();
-
-        let filtered = this.cache.filter(tempTitle => tempTitle.title === title);
+    getByName(name) {
+        let filtered = this.cache.filter(title => title.title === name);
         if (filtered.length > 0) {
             return filtered[0];
         }
@@ -93,29 +70,36 @@ export class TitleCache {
 
     /**
      * @param id {string} IMDB id of the title to be retrieved
-     * @return {NetflixTitle} returns the found title or null
+     * @return {Title} returns the found title or null
      */
     getByIMDBId(id) {
-        this.checkCacheValidity();
-
-        let filtered = this.cache.filter(tempTitle => {
-            if(tempTitle.IMDBInfo)
-                return tempTitle.IMDBInfo.id === id;
-            else
-                return false
-        });
+        let filtered = this.cache.filter(tempTitle => tempTitle.IMDBId === id);
         if (filtered.length > 0) {
             return filtered[0];
         }
         return null;
     }
+}
 
+class Title
+{
     /**
-     * Checks if cache has been loaded otherwise throws an exception
+     *
+     * @param name {string}
+     * @param rating {number}
+     * @param IMDBId {string}
+     * @param date {Date}
      */
-    checkCacheValidity() {
-        if (!this.cacheLoaded) {
-            throw "Trying to add a title to the cache while cache has not loaded yet";
-        }
+    constructor(name, rating, IMDBId,  date = Date.now()) {
+        this.name = name;
+        this.rating = rating;
+        this.IMDBId = IMDBId;
+        this.date = date;
+    }
+
+    isStale(){
+        let diffInTime = this.date.getTime() - Date.now().getTime();
+        let diffInDays = diffInTime / (1000 * 3600 * 24);
+        return diffInDays > cacheMaxAge
     }
 }
