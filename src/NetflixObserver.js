@@ -17,14 +17,16 @@ export class NetflixObserver {
      * @param {MutationRecord[]} mutationList
      * @param {MutationObserver} observer
      */
-    mutationObserved(mutationList, observer) {
-        mutationList.forEach((mutation) => {
+    async mutationObserved(mutationList, observer) {
+        for(let mutation of mutationList)
+        {
             switch (mutation.type) {
                 case 'childList':
                     /* One or more children have been added to and/or removed
                        from the tree.
                        (See mutation.addedNodes and mutation.removedNodes.) */
-                    this._processChildListMutation(mutation);
+                    await this._processChildListMutation(mutation);
+                    await this.titleCache.persist();
                     break;
                 case 'attributes':
                     /* An attribute value changed on the element in
@@ -33,7 +35,7 @@ export class NetflixObserver {
                        its previous value is in mutation.oldValue. */
                     break;
             }
-        });
+        }
     }
 
     /**
@@ -41,7 +43,7 @@ export class NetflixObserver {
      *
      * @param {MutationRecord} mutation
      */
-    _processChildListMutation(mutation) {
+    async _processChildListMutation(mutation) {
         if (mutation.type !== "childList")
             throw "NetflixObserver._processChildListMutation called with invalid mutation: '"
             + mutation.type +
@@ -52,7 +54,7 @@ export class NetflixObserver {
                 let cards = getCardsFromRow(row);
                 if (!cards)
                     continue;
-                this._processCards(cards)
+                await this._processCards(cards)
             }
         }
 
@@ -83,13 +85,13 @@ export class NetflixObserver {
      *
      * @param {HTMLDivElement[]} cards
      */
-    _processCards(cards) {
+    async _processCards(cards) {
         for (const card of cards) {
             let titleName = getTitleNameFromCard(card)
             console.log(this.titleCache);
             let titleInfo = this.titleCache.getByName(titleName)
             if (!titleInfo) {
-                titleInfo = this.fetcher.fetch(titleName);
+                titleInfo = await this.fetcher.fetch(titleName);
                 this.titleCache.add(titleInfo)
             }
             addTitleInformationToCard(titleInfo, card);

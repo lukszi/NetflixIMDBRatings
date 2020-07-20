@@ -16,7 +16,7 @@ export class TitleCache {
         // Clear cache
         this.cache = undefined;
         // Load the cache from persistence
-        this.cache = await GM_getValue("cache", []);
+        this.cache = await GM.getValue("cache", []);
     }
 
     /**
@@ -26,7 +26,7 @@ export class TitleCache {
      */
     async persist() {
         let cacheWithoutJquery = JSON.parse(JSON.stringify(this.cache));
-        await GM_setValue("cache", cacheWithoutJquery);
+        await GM.setValue("cache", cacheWithoutJquery);
         return true;
     }
 
