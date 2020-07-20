@@ -36,6 +36,7 @@ function getChildWithClass(element, className) {
 }
 
 /**
+ *
  * @param {HTMLDivElement} cardContainer containing a movie, must have the "title-card-container" class
  * @return {string} title of the movie displayed in the card
  */
@@ -48,6 +49,5 @@ export function getTitleFromCard(cardContainer){
     let titleCard = getChildWithClass(cardContainer, "title-card");
     let ptrack_content = getChildWithClass(titleCard, "ptrack-content");
     let titleHref = ptrack_content.children[0];
-    let title = titleHref.text;
-    return title;
+    return titleHref.text;
 }
