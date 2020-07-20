@@ -78,6 +78,9 @@ export class NetflixObserver{
     _processCards(cards) {
         for(const card of cards){
             let title = getTitleFromCard(card)
+            if(!this.cache.getByName(title)){
+                let imdbInfo = this.fetcher.fetch(title);
+            }
         }
     }
 }

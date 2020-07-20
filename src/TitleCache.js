@@ -1,4 +1,4 @@
-const cacheMaxAge = 7;
+import {Title} from "./Title";
 
 /**
  * Caches already found values
@@ -12,7 +12,7 @@ export class TitleCache {
      *
      * Initializes the TitleCache from the storage
      */
-    async load(){
+    async load() {
         // Clear cache
         this.cache = [];
         // Load the cache from persistence
@@ -33,17 +33,15 @@ export class TitleCache {
     /**
      * Adds a title to the cache
      *
-     * @param name { string } Title of the movie
-     * @param IMDBId { string } IMDB id of the movie
-     * @param rating { number } rating of the title
+     * @param {Title} title
      */
-    add(name, IMDBId, rating) {
+    add(title) {
         // Check if a title is in cache already
-        let cachedTitle = this.getByName(name);
+        let cachedTitle = this.getByName(title.name);
         if (cachedTitle) {
             // Remove if title is stale
             if (cachedTitle.isStale()) {
-                this.cache.filter(title => title.name !== cachedTitle.name);
+                this.cache.filter(iTitle => iTitle.name !== cachedTitle.name);
             }
             // Not adding title that isn't stale again
             else {
@@ -51,7 +49,6 @@ export class TitleCache {
             }
         }
 
-        let title = new Title(name, rating, IMDBId);
         this.cache.push(title);
         return true;
     }
@@ -78,28 +75,5 @@ export class TitleCache {
             return filtered[0];
         }
         return null;
-    }
-}
-
-class Title
-{
-    /**
-     *
-     * @param name {string}
-     * @param rating {number}
-     * @param IMDBId {string}
-     * @param date {Date}
-     */
-    constructor(name, rating, IMDBId,  date = Date.now()) {
-        this.name = name;
-        this.rating = rating;
-        this.IMDBId = IMDBId;
-        this.date = date;
-    }
-
-    isStale(){
-        let diffInTime = this.date.getTime() - Date.now().getTime();
-        let diffInDays = diffInTime / (1000 * 3600 * 24);
-        return diffInDays > cacheMaxAge;
     }
 }

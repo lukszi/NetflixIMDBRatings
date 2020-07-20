@@ -1,10 +1,12 @@
-export class ImdbFetcher{
+import {Title} from "./Title";
+
+export class ImdbFetcher {
     /**
      * dummy fetcher
      * @param title the rating will be fetched for
-     * @return {number} rating of the title
+     * @return {Title} Information about the title
      */
-    fetch(title){
-        return 4;
+    fetch(title) {
+        return new Title(title, 5, "tt0903747");
     }
 }
