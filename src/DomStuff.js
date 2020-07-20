@@ -41,7 +41,7 @@ function getChildWithClass(element, className) {
  * @param {HTMLDivElement} cardContainer containing a movie, must have the "title-card-container" class
  * @return {string} title of the movie displayed in the card
  */
-export function getTitleFromCard(cardContainer){
+export function getTitleNameFromCard(cardContainer){
     // Check if div has the right type
     if(!Array.from(cardContainer.classList).includes("title-card-container")){
         throw "Can't get title from a non 'title-card-container' div.";
@@ -51,4 +51,13 @@ export function getTitleFromCard(cardContainer){
     let ptrack_content = getChildWithClass(titleCard, "ptrack-content");
     let titleHref = ptrack_content.children[0];
     return titleHref.text;
+}
+
+/**
+ *
+ * @param {Title} title
+ * @param {HTMLDivElement} card
+ */
+export function addTitleInformationToCard(title, card) {
+    console.log("adding title", title, "to card", card)
 }

@@ -1,4 +1,4 @@
-import {getCardsFromRow, getTitleFromCard} from "./DomManipulation";
+import {addTitleInformationToCard, getCardsFromRow, getTitleNameFromCard} from "./DomStuff";
 
 export class NetflixObserver {
     /**
@@ -7,7 +7,7 @@ export class NetflixObserver {
      * @param {ImdbFetcher} fetcher
      */
     constructor(cache, fetcher) {
-        this.cache = cache;
+        this.titleCache = cache;
         this.fetcher = fetcher;
     }
 
@@ -42,7 +42,7 @@ export class NetflixObserver {
      * @param {MutationRecord} mutation
      */
     _processChildListMutation(mutation) {
-        if (mutation.type !== 'childlist')
+        if (mutation.type !== "childList")
             throw "NetflixObserver._processChildListMutation called with invalid mutation: '"
             + mutation.type +
             "'. Only childList mutations are Accepted"
@@ -85,10 +85,14 @@ export class NetflixObserver {
      */
     _processCards(cards) {
         for (const card of cards) {
-            let title = getTitleFromCard(card)
-            if (!this.cache.getByName(title)) {
-                let imdbInfo = this.fetcher.fetch(title);
+            let titleName = getTitleNameFromCard(card)
+            console.log(this.titleCache);
+            let titleInfo = this.titleCache.getByName(titleName)
+            if (!titleInfo) {
+                titleInfo = this.fetcher.fetch(titleName);
+                this.titleCache.add(titleInfo)
             }
+            addTitleInformationToCard(titleInfo, card);
         }
     }
 }

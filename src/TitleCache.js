@@ -4,8 +4,8 @@ import {Title} from "./Title";
  * Caches already found values
  */
 export class TitleCache {
-    async constructor() {
-        await this.load();
+    constructor() {
+        this.waitForLoad = this.load()
     }
 
     /**
@@ -14,7 +14,7 @@ export class TitleCache {
      */
     async load() {
         // Clear cache
-        this.cache = [];
+        this.cache = undefined;
         // Load the cache from persistence
         this.cache = await GM_getValue("cache", []);
     }
