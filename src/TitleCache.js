@@ -54,8 +54,8 @@ export class TitleCache {
     }
 
     /**
-     * @param name {string} name of the name to be retrieved
-     * @return {Title} returns the found name or null
+     * @param {string} name of the name to be retrieved
+     * @return {Title} Title with the given name or null if not yet cached.
      */
     getByName(name) {
         let filtered = this.cache.filter(title => title.title === name);
@@ -66,7 +66,7 @@ export class TitleCache {
     }
 
     /**
-     * @param id {string} IMDB id of the title to be retrieved
+     * @param {string} id IMDB id of the title to be retrieved
      * @return {Title} returns the found title or null
      */
     getByIMDBId(id) {

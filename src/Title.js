@@ -4,10 +4,10 @@ export class Title
 {
     /**
      *
-     * @param name {string}
-     * @param rating {number}
-     * @param IMDBId {string}
-     * @param requestDate {Date}
+     * @param {string} name
+     * @param{number} rating
+     * @param {string} IMDBId
+     * @param {Date} requestDate
      */
     constructor(name, rating, IMDBId,  requestDate = Date.now()) {
         this.name = name;
@@ -16,6 +16,11 @@ export class Title
         this.requestDate = requestDate;
     }
 
+    /**
+     * Check if this object contains data on a title that is too old
+     *
+     * @return {boolean} true if Information ist older than cacheMaxAge
+     */
     isStale(){
         let diffInTime = this.requestDate.getTime() - Date.now().getTime();
         let diffInDays = diffInTime / (1000 * 3600 * 24);

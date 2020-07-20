@@ -3,7 +3,7 @@ import {Title} from "./Title";
 export class ImdbFetcher {
     /**
      * dummy fetcher
-     * @param title the rating will be fetched for
+     * @param {string} title the rating will be fetched for
      * @return {Title} Information about the title
      */
     fetch(title) {

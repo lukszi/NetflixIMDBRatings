@@ -12,6 +12,7 @@ export class NetflixObserver{
     }
 
     /**
+     * Called when a Mutation on the DOM is observed.
      *
      * @param {MutationRecord[]} mutationList
      * @param {MutationObserver} observer
@@ -36,10 +37,15 @@ export class NetflixObserver{
     }
 
     /**
+     * Takes a Mutation
      *
      * @param {MutationRecord} mutation
      */
     _processChildListMutation(mutation) {
+        if(mutation.type !== 'childlist')
+            throw "NetflixObserver._processChildListMutation called with invalid mutation: '"
+                + mutation.type +
+                "'. Only childList mutations are Accepted"
         if (containsMovieRow(mutation)) {
             let rows = getMovieRows(mutation);
             for (let row of rows) {
@@ -62,6 +68,7 @@ export class NetflixObserver{
         }
 
         /**
+         * Takes a MutationRecord and extracts all rows containing movie cards (divs with class "lolomoRow")
          *
          * @param {MutationRecord} mutation
          * @return {HTMLDivElement[]}
@@ -72,6 +79,7 @@ export class NetflixObserver{
     }
 
     /**
+     * Takes a List of newly added movie cards and adds the IMDB ratings to them
      *
      * @param {HTMLDivElement[]} cards
      */

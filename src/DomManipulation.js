@@ -1,7 +1,8 @@
 /**
+ * Fetches all movie cards from a row
  *
  * @param {HTMLDivElement} row
- * @return {HTMLDivElement[]}
+ * @return {HTMLDivElement[]} all movie cards in the given row, ie divs with the class "title-card-container"
  */
 export function getCardsFromRow(row){
     let rowContainer_title_card = getChildWithClass(row, "rowContainer_title_card");
@@ -26,9 +27,9 @@ export function getCardsFromRow(row){
 
 /**
  *
- * @param {HTMLDivElement} element
- * @param {String} className
- * @return {HTMLDivElement}
+ * @param {HTMLDivElement} element whose children to search
+ * @param {String} className the childElement needs to have
+ * @return {HTMLDivElement} first child of element with the given class
  */
 function getChildWithClass(element, className) {
     return Array.from(element.children)
