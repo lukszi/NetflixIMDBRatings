@@ -1,13 +1,11 @@
 import {mutationObserved} from "./observer";
 
+const body = document.querySelector("body");
 
-const observer = new MutationObserver(mutationObserved)
-
-const body = document.querySelector("body")
 const observerOptions = {
     childList: true,
     attributes: true,
     subtree: true
-}
-console.log("run")
-observer.observe(body, observerOptions)
+};
+const observer = new MutationObserver(mutationObserved);
+observer.observe(body, observerOptions);

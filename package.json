@@ -6,7 +6,8 @@
   "repository": "https://github.com/lukszi/NetflixIMDBRatings",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
+    "build": "webpack --mode=production",
+    "build-dev": "webpack --mode=development",
     "dev-server": "webpack-dev-server"
   },
   "author": "Lukas Sz",

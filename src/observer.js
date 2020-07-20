@@ -1,7 +1,13 @@
-import {getCardsFromRow} from "./DomManipulation";
+import {getCardsFromRow, getTitleFromCard} from "./DomManipulation";
 
+/**
+ *
+ * @param {HTMLDivElement[]} cards
+ */
 function processCards(cards) {
-
+    for(const card of cards){
+        let title = getTitleFromCard(card)
+    }
 }
 
 /**
@@ -12,7 +18,9 @@ function processChildListMutation(mutation) {
     if (containsMovieRow(mutation)) {
         let rows = getMovieRows(mutation);
         for (let row of rows) {
-            let cards = getCardsFromRow(row)
+            let cards = getCardsFromRow(row);
+            if(!cards)
+                continue;
             processCards(cards)
         }
     }
@@ -24,8 +32,8 @@ function processChildListMutation(mutation) {
      * @return {boolean}
      */
     function containsMovieRow(mutation) {
-        let classList = Array.from(mutation.addedNodes).flatMap(addedNode => Array.from(addedNode.classList))
-        return classList.includes("lolomoRow")
+        let classList = Array.from(mutation.addedNodes).flatMap(addedNode => Array.from(addedNode.classList));
+        return classList.includes("lolomoRow");
     }
 
     /**

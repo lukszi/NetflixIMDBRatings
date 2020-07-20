@@ -43,7 +43,7 @@ export class TitleCache {
         if (cachedTitle) {
             // Remove if title is stale
             if (cachedTitle.isStale()) {
-                this.cache.filter(title => title.name !== cachedTitle.name)
+                this.cache.filter(title => title.name !== cachedTitle.name);
             }
             // Not adding title that isn't stale again
             else {
@@ -51,7 +51,7 @@ export class TitleCache {
             }
         }
 
-        let title = new Title(name, rating, IMDBId)
+        let title = new Title(name, rating, IMDBId);
         this.cache.push(title);
         return true;
     }
@@ -100,6 +100,6 @@ class Title
     isStale(){
         let diffInTime = this.date.getTime() - Date.now().getTime();
         let diffInDays = diffInTime / (1000 * 3600 * 24);
-        return diffInDays > cacheMaxAge
+        return diffInDays > cacheMaxAge;
     }
 }
