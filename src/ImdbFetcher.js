@@ -1,6 +1,15 @@
 import {Title} from "./Title";
 
 export class ImdbFetcher {
+
+    /**
+     *
+     * @param {string} apiKey for the omdbAPI
+     */
+    constructor(apiKey) {
+        this._secret_key = apiKey
+    }
+
     /**
      * dummy fetcher
      * @param {string} title the rating will be fetched for
@@ -21,7 +30,6 @@ export class ImdbFetcher {
      * @param {string} title
      */
     buildUrl(title){
-        const secret_key = "b1b5d454" // Props to the absolute genius who pushed his key to a public github repo
-        return `https://www.omdbapi.com/?apikey=${secret_key}&t=${encodeURI(title)}`;
+        return `https://www.omdbapi.com/?apikey=${this._secret_key}&t=${encodeURI(title)}`;
     }
 }
