@@ -1,13 +1,15 @@
 import {NetflixObserver} from "./NetflixObserver";
-import {TitleCache} from "./TitleCache";
+import {clearCache, TitleCache} from "./TitleCache";
 import {ImdbFetcher} from "./ImdbFetcher";
+
+// clearCache()
 
 async function main(){
     const body = document.querySelector("body");
 
     // Setup IMDB Info fetcher and Cache
     const apiKey = "b1b5d454" // Not mine, found that online
-    const cache = new TitleCache()
+    const cache = new TitleCache();
     await cache.waitForLoad
     const imdb = new ImdbFetcher(apiKey);
     const netflixObserver = new NetflixObserver(cache, imdb);

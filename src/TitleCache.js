@@ -16,7 +16,8 @@ export class TitleCache {
         // Clear cache
         this.cache = undefined;
         // Load the cache from persistence
-        this.cache = await GM.getValue("cache", []);
+        this.cache = await GM_SuperValue.get("cache", []);
+        console.log("Load cache gives this:", this.cache)
     }
 
     /**
@@ -26,7 +27,7 @@ export class TitleCache {
      */
     async persist() {
         let cacheWithoutJquery = JSON.parse(JSON.stringify(this.cache));
-        await GM.setValue("cache", cacheWithoutJquery);
+        await GM_SuperValue.set("cache", cacheWithoutJquery);
         return true;
     }
 
@@ -58,7 +59,8 @@ export class TitleCache {
      * @return {Title} Title with the given name or null if not yet cached.
      */
     getByName(name) {
-        let filtered = this.cache.filter(title => title.title === name);
+        let filtered = this.cache.filter(title => title.name === name);
+        console.log("get by name ",name ," found this:", filtered)
         if (filtered.length > 0) {
             return filtered[0];
         }
@@ -76,4 +78,8 @@ export class TitleCache {
         }
         return null;
     }
+}
+
+export function clearCache(){
+    GM_SuperValue.set("cache", [])
 }

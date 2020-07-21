@@ -26,6 +26,7 @@ export class NetflixObserver {
                        from the tree.
                        (See mutation.addedNodes and mutation.removedNodes.) */
                     await this._processChildListMutation(mutation);
+                    console.log("persisting cache")
                     await this.titleCache.persist();
                     break;
                 case 'attributes':
@@ -88,8 +89,9 @@ export class NetflixObserver {
     async _processCards(cards) {
         for (const card of cards) {
             let titleName = getTitleNameFromCard(card)
-            console.log(this.titleCache);
+            console.log(titleName);
             let titleInfo = this.titleCache.getByName(titleName)
+            console.log(titleInfo)
             if (!titleInfo) {
                 titleInfo = await this.fetcher.fetch(titleName);
                 this.titleCache.add(titleInfo)

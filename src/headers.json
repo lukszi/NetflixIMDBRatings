@@ -9,11 +9,12 @@
     "GM_getResourceText",
     "GM.xmlhttpRequest",
     "GM.xmlHttpRequest",
-    "GM.getValue",
-    "GM.setValue"
+    "GM_getValue",
+    "GM_setValue"
   ],
   "require": [
-    "https://code.jquery.com/jquery-3.4.1.min.js"
+    "https://code.jquery.com/jquery-3.4.1.min.js",
+    "https://userscripts-mirror.org/scripts/source/107941.user.js"
   ],
   "namespace": "http://tampermonkey.net/"
 }
