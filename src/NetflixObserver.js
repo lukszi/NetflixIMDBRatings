@@ -93,9 +93,7 @@ export class NetflixObserver {
     async _processCards(cards) {
         for (const card of cards) {
             let titleName = getTitleNameFromCard(card)
-            console.log(titleName);
             let titleInfo = await this.titleCache.getByName(titleName)
-            console.log(titleInfo)
             if (!titleInfo) {
                 titleInfo = await this.fetcher.fetch(titleName);
                 await this.titleCache.add(titleInfo)

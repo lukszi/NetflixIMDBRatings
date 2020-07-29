@@ -17,7 +17,6 @@ export class TitleCache {
         this.cache = undefined;
         // Load the cache from persistence
         this.cache = await GM_SuperValue.get("cache", []);
-        console.log("Load cache gives this:", this.cache)
         this._dirty = false
     }
 
@@ -72,7 +71,6 @@ export class TitleCache {
     async getByName(name) {
         await this.waitForLoad;
         let filtered = this.cache.filter(title => title.name === name);
-        console.log("get by name ",name ," found this:", filtered)
         if (filtered.length > 0) {
             return filtered[0];
         }
