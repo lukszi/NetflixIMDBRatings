@@ -18,6 +18,7 @@ export class TitleCache {
         // Load the cache from persistence
         this.cache = await GM_SuperValue.get("cache", []);
         console.log("Load cache gives this:", this.cache)
+        this._dirty = false
     }
 
     /**
@@ -28,6 +29,7 @@ export class TitleCache {
     async persist() {
         let cacheWithoutJquery = JSON.parse(JSON.stringify(this.cache));
         await GM_SuperValue.set("cache", cacheWithoutJquery);
+        this._dirty = false;
         return true;
     }
 
@@ -51,7 +53,15 @@ export class TitleCache {
         }
 
         this.cache.push(title);
+        this._dirty = true;
         return true;
+    }
+
+    /**
+     * @return {boolean} true if the cache has been modified since the last persist, false otherwise
+     */
+    isDirty(){
+        return this._dirty
     }
 
     /**

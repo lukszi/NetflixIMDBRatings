@@ -26,8 +26,10 @@ export class NetflixObserver {
                        from the tree.
                        (See mutation.addedNodes and mutation.removedNodes.) */
                     await this._processChildListMutation(mutation);
-                    console.log("persisting cache")
-                    await this.titleCache.persist();
+                    if(this.titleCache.isDirty()){
+                        console.log("persisting cache")
+                        await this.titleCache.persist();
+                    }
                     break;
                 case 'attributes':
                     /* An attribute value changed on the element in
