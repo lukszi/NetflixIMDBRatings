@@ -40,7 +40,7 @@ export class TitleCache {
     async add(title) {
         await this.waitForLoad;
         // Check if a title is in cache already
-        let cachedTitle = this.getByName(title.name);
+        let cachedTitle = await this.getByName(title.name);
         if (cachedTitle) {
             // Remove if title is stale
             if (cachedTitle.isStale()) {
