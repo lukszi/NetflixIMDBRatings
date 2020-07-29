@@ -66,7 +66,9 @@ export class NetflixObserver {
          * @return {boolean}
          */
         function containsMovieRow(mutation) {
-            let classList = Array.from(mutation.addedNodes).flatMap(addedNode => Array.from(addedNode.classList));
+            if(!mutation.addedNodes)
+                return false;
+            let classList = Array.from(mutation.addedNodes).flatMap(addedNode => addedNode.classList ? Array.from(addedNode.classList): []);
             return classList.includes("lolomoRow");
         }
 
