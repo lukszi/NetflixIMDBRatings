@@ -27,7 +27,6 @@ export class NetflixObserver {
                        (See mutation.addedNodes and mutation.removedNodes.) */
                     await this._processChildListMutation(mutation);
                     if(this.titleCache.isDirty()){
-                        console.log("persisting cache")
                         await this.titleCache.persist();
                     }
                     break;

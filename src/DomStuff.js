@@ -5,9 +5,8 @@
  * @return {HTMLDivElement[]} all movie cards in the given row, ie divs with the class "title-card-container"
  */
 export function getCardsFromRow(row){
-    // I have not yet implemented bigRows, check for that
+    // I have not yet implemented bigRows TODO: Implement bigRows
     if(!row.querySelector(".rowContainer_title_card")){
-        console.log("Detected bigRow, please implement");
         return null;
     }
 
