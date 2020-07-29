@@ -12,7 +12,7 @@ I won't be able to go to sleep anymore and generally life is pain, holy shit I h
 All other userscripts and browser extensions I found are broken, here is my go at it.
 
 ## How do you wanna solve it?
-Show IMDB ratings where the Netflix percentage "ratings" would be shown
+Show IMDB ratings on the netflix cards
 
 ## What is this and how do I use it?
 This is a userscript, you can use it by
@@ -23,13 +23,10 @@ This is a userscript, you can use it by
 1. Giving this plugin the required permissions
 
 ## This doesn't work anymore
-It shouldn't work since it isn't done yet
-
-For future reference though: The source code is here, create a PR, fix it and ask me to merge it
+The source code is here, create a PR, fix it and ask me to merge it.
 
 ## Todo list
  * [x] Read movie titles from Netflix
- * [x] Lookup movies on imdb to get the ID
- * [x] Get ratings from that ID
- * [ ] Insert ratings into the website using the classes and structures used by the Netflix "ratings"
- * [ ] Update titles that were dynamically added by scrolling down
+ * [x] Get ratings from IMDB
+ * [x] Insert ratings into the website using the classes and structures used by the Netflix "ratings"
+ * [x] Update titles that were dynamically added by scrolling down

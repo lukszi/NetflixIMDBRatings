@@ -28,10 +28,30 @@ export function getTitleNameFromCard(cardContainer){
 }
 
 /**
+ * Creates a span Containing the given titles rating
+ *
+ * @param {Title} title
+ * @return {HTMLSpanElement} Span with the corresponding rating
+ */
+function createTitleSpan(title) {
+    let span = document.createElement("span");
+    span.classList.add("imdb-title-span")
+    span.textContent = title.rating ? title.rating.toString() : "N/a";
+    span.style.position = "absolute";
+    span.style.zIndex = "2";
+    return span;
+}
+
+/**
  *
  * @param {Title} title
  * @param {HTMLDivElement} card
  */
 export function addTitleInformationToCard(title, card) {
-    console.log("adding title", title, "to card", card)
+    // Skip cards that already have a rating on them
+    if(card.querySelector(".imdb-title-span")){
+        return;
+    }
+    let titleCard = card.querySelector(".ptrack-content").parentElement;
+    titleCard.insertBefore(createTitleSpan(title), titleCard.children[0]);
 }

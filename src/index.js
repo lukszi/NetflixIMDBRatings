@@ -24,6 +24,7 @@ async function main(){
 
     const observer = new MutationObserver(observerCallback);
     observer.observe(body, observerOptions);
+    await netflixObserver.runInitialScan();
 }
 
 main();

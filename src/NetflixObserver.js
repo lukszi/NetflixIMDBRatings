@@ -100,4 +100,8 @@ export class NetflixObserver {
             addTitleInformationToCard(titleInfo, card);
         }
     }
+
+    async runInitialScan() {
+        await this._processCards(Array.from(document.querySelectorAll(".title-card-container")));
+    }
 }
