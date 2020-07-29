@@ -94,11 +94,11 @@ export class NetflixObserver {
         for (const card of cards) {
             let titleName = getTitleNameFromCard(card)
             console.log(titleName);
-            let titleInfo = this.titleCache.getByName(titleName)
+            let titleInfo = await this.titleCache.getByName(titleName)
             console.log(titleInfo)
             if (!titleInfo) {
                 titleInfo = await this.fetcher.fetch(titleName);
-                this.titleCache.add(titleInfo)
+                await this.titleCache.add(titleInfo)
             }
             addTitleInformationToCard(titleInfo, card);
         }

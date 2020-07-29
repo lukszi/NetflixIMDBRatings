@@ -38,7 +38,8 @@ export class TitleCache {
      *
      * @param {Title} title
      */
-    add(title) {
+    async add(title) {
+        await this.waitForLoad;
         // Check if a title is in cache already
         let cachedTitle = this.getByName(title.name);
         if (cachedTitle) {
@@ -68,7 +69,8 @@ export class TitleCache {
      * @param {string} name of the name to be retrieved
      * @return {Title} Title with the given name or null if not yet cached.
      */
-    getByName(name) {
+    async getByName(name) {
+        await this.waitForLoad;
         let filtered = this.cache.filter(title => title.name === name);
         console.log("get by name ",name ," found this:", filtered)
         if (filtered.length > 0) {
@@ -81,7 +83,8 @@ export class TitleCache {
      * @param {string} id IMDB id of the title to be retrieved
      * @return {Title} returns the found title or null
      */
-    getByIMDBId(id) {
+    async getByIMDBId(id) {
+        await this.waitForLoad;
         let filtered = this.cache.filter(tempTitle => tempTitle.IMDBId === id);
         if (filtered.length > 0) {
             return filtered[0];
