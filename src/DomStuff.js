@@ -39,6 +39,7 @@ function createTitleSpan(title) {
     span.textContent = title.rating ? title.rating.toString() : "N/a";
     span.style.position = "absolute";
     span.style.zIndex = "2";
+    span.style.fontSize = "200%"
     return span;
 }
 
