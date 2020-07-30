@@ -9,6 +9,7 @@ export class NetflixObserver {
     constructor(cache, fetcher) {
         this.titleCache = cache;
         this.fetcher = fetcher;
+        this.scanForMovieCards();
     }
 
     /**
@@ -31,10 +32,13 @@ export class NetflixObserver {
                     }
                     break;
                 case 'attributes':
-                    /* An attribute value changed on the element in
-                       mutation.target.
-                       The attribute name is in mutation.attributeName, and
-                       its previous value is in mutation.oldValue. */
+                    // Detect movie row stopping animation to show new movies
+                    if(mutation.attributeName === "class"){
+                        let classList = Array.from(mutation.target.classList);
+                        if(classList.includes("sliderContent") && classList.includes("row-with-x-columns") && !classList.includes("animating")){
+                            await this.scanForMovieCards(mutation.target);
+                        }
+                    }
                     break;
             }
         }
@@ -101,7 +105,12 @@ export class NetflixObserver {
         }
     }
 
-    async runInitialScan() {
-        await this._processCards(Array.from(document.querySelectorAll(".title-card-container")));
+    /**
+     *
+     * @param {HTMLElement} rootElement to start the search on
+     * @return {Promise<void>}
+     */
+    async scanForMovieCards(rootElement= document) {
+        await this._processCards(Array.from(rootElement.querySelectorAll(".title-card-container")));
     }
 }
