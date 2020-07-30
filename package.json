@@ -1,6 +1,6 @@
 {
   "name": "netflix_ratings",
-  "version": "0.0.1",
+  "version": "0.1",
   "description": "A Userscript that shows IMDB Ratings in Netflix",
   "main": "index.js",
   "repository": "https://github.com/lukszi/NetflixIMDBRatings",
