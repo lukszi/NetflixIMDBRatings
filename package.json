@@ -1,13 +1,11 @@
 {
   "name": "netflix_ratings",
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "A Userscript that shows IMDB Ratings in Netflix",
   "main": "index.js",
   "repository": "https://github.com/lukszi/NetflixIMDBRatings",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode=production",
-    "build-dev": "webpack --mode=development",
     "dev-server": "webpack-dev-server"
   },
   "author": "Lukas Sz",

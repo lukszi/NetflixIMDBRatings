@@ -1,5 +1,5 @@
 {
-  "version": "0.1",
+  "version": "0.1.0",
   "author": "Lukas Sz",
   "description": "A Userscript that shows IMDB Ratings in Netflix",
   "name": "Netflix IMDB ratings",
