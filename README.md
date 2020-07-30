@@ -2,12 +2,13 @@
 
 ## What is this and how do I use it?
 This is a userscript that adds imdb ratings to netflix, you can use it by
-1. Cloning this repository
-1. using npm to build the userscript
-1. Adding this userscript to Greasemonkey
+1. Setting up buildenvironment with ```npm install```
+1. Building with ```npm build```
+1. Running ```npm dev-server```
+1. installing from [here](http://localhost:8080/dist/main.user.js)
 
 ## This doesn't work anymore
 The source code is here, create a PR, fix it and ask me to merge it.
 
 ## Todo list
- * [ ] make the imdb ratings look better
+ * [ ] Implement big rows

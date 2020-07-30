@@ -23,9 +23,7 @@ export class NetflixObserver {
         {
             switch (mutation.type) {
                 case 'childList':
-                    /* One or more children have been added to and/or removed
-                       from the tree.
-                       (See mutation.addedNodes and mutation.removedNodes.) */
+                    // Detect new movie rows being created
                     await this._processChildListMutation(mutation);
                     if(this.titleCache.isDirty()){
                         await this.titleCache.persist();
